@@ -1,23 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Blog Create EjS eXample</title>
-</head>
+    <%- include('./partials/header.ejs')   %>
 <body>
 
 <h1>CreateEjS Heading</h1>
 <p>Create Ejs form below.</p>
 
-<nav>
-    <a href="/">Home Page</a>
-    <a href="/about">About Page</a>
-    <a href="/blogs/create">New Blog</a>
-
-</nav>
+<%- include('./partials/nav.ejs')   %>
 
 <h2>Create a new blog</h2>
 <p>Lorem ipsum blah blah</p>
+<div class="create-blog content"> 
 <form>
     <label for="title">Blog Title:</label>
     <input type="text" id="title" required>
@@ -27,6 +20,11 @@
     <textarea id="body" required></textarea>
     <button>Submit</button>
 </form>
+
+</div>
+
+<%- include('./partials/footer.ejs')   %>
+
 
 </body>
 </html>
