@@ -1,34 +1,43 @@
-// function sayHello(name){
-//     console.log("Hello ", name)
-// }
+const express = require('express');
+const morgan = require('morgan');
+const mongoose = require('mongoose');
+const blogRoutes = require('./routes/blogRoutes');
 
-// sayHello("Umair")
+// express app
+const app = express();
 
-//const logger = require('./logger');
+// connect to mongodb & listen for requests
+const dbURI = 'mongodb+srv://nodejsbloguser:Password123@cluster0.hwjjpkt.mongodb.net/nodejstut?retryWrites=true&w=majority&appName=Cluster0';
 
-//console.log(logger);
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(result => app.listen(3000))
+  .catch(err => console.log(err));
 
-//logger.log('message');
-// logger('message');
+// register view engine
+app.set('view engine', 'ejs');
 
-// const path = require('path');
-// const os = require('os');
-const fs = require('fs');
+// middleware & static files
+app.use(express.static('public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan('dev'));
+app.use((req, res, next) => {
+  res.locals.path = req.path;
+  next();
+});
 
+// routes
+app.get('/', (req, res) => {
+  res.redirect('/blogs');
+});
 
-// var pathObj = path.parse(__filename);
+app.get('/about', (req, res) => {
+  res.render('about', { title: 'About' });
+});
 
-// var totalMemory = os.totalmem;
-// var freeMemory = os.freemem;
+// blog routes
+app.use('/blogs', blogRoutes);
 
-//var file = fs.readdirSync('../');
-
-// console.log(pathObj);
-// console.log(`Total Memory ${totalMemory}`);
-// console.log(`Free Memory ${freeMemory}`);
-//console.log(file);
-
-fs.readdir('./', function(err, files) {
-    if (err) console.log('Error', err);
-    else console.log('Result', files);
+// 404 page
+app.use((req, res) => {
+  res.status(404).render('404', { title: '404' });
 });
